@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="is">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NOW Foods Daily Vitamin Recommender</title>
+  <title>NOW Foods – Dagleg vítamínráðgjöf</title>
   <style>
     :root{
       --bg:#0b1220;
@@ -15,10 +15,12 @@
       --good:#46d38a;
       --warn:#ffcf5a;
       --bad:#ff6b6b;
+      --orange:#ff8a00;
     }
     *{box-sizing:border-box}
     body{
-      margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
       background: radial-gradient(1200px 800px at 20% 0%, #14244a 0%, var(--bg) 60%);
       color:var(--text);
     }
@@ -29,11 +31,7 @@
     h1{margin:0 0 6px; font-size:22px; letter-spacing:0.2px}
     .sub{color:var(--muted); font-size:13px; line-height:1.35}
     main{max-width:1100px; margin:0 auto; padding:12px 18px 40px;}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-    }
+    .grid{display:grid; grid-template-columns: 1fr; gap:14px;}
     @media (min-width: 980px){
       .grid{ grid-template-columns: 420px 1fr; align-items:start; }
     }
@@ -51,7 +49,7 @@
       color:#d9e6ff;
     }
     label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px;}
-    input, select, button, textarea{
+    input, select, button{
       width:100%;
       border-radius:12px;
       border:1px solid var(--border);
@@ -63,7 +61,6 @@
     }
     input::placeholder{color:rgba(234,240,255,0.45)}
     .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
-    .row3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
     .checks{display:grid; gap:8px; margin-top:8px;}
     .check{
       display:flex; gap:10px; align-items:flex-start;
@@ -106,68 +103,108 @@
       padding:12px;
       background: rgba(0,0,0,0.14);
     }
-    .item h3{margin:0 0 6px; font-size:14px;}
-    .meta{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;}
+    .item h3{margin:0; font-size:14px;}
+    .meta{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0;}
     .item p{margin:6px 0 0; color:var(--muted); font-size:12.5px; line-height:1.4;}
     a{color:#b7d2ff}
     .small{font-size:12px; color:var(--muted); line-height:1.4;}
     .hr{height:1px; background:var(--border); margin:12px 0;}
-    textarea{min-height:120px; resize:vertical}
+
+    /* NÝTT: vara + mynd + appelsínugult nafn */
+    .titleRow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .prodImg{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      object-fit:cover;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.12);
+      flex:0 0 auto;
+    }
+    .prodName{
+      color: var(--orange);
+      font-weight: 700;
+      letter-spacing: 0.1px;
+    }
+
+    /* Yfirlit (fyrir sýnilegt HTML) */
+    #summaryPreview{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background: rgba(0,0,0,0.14);
+      padding:12px;
+    }
+    #summaryPreview .line{margin:0 0 6px;}
+    #summaryPreview .muted{color:var(--muted);}
+    #summaryPreview ul{margin:8px 0 0; padding-left:18px;}
+    #summaryPreview li{margin:6px 0;}
+    .summaryItem{
+      display:flex; align-items:center; gap:10px;
+    }
+    .summaryItem img{
+      width:28px; height:28px; border-radius:9px; object-fit:cover;
+      border:1px solid var(--border);
+    }
+    .hidden{display:none;}
   </style>
 </head>
 <body>
   <header>
-    <h1>NOW Foods Daily Vitamin Recommender</h1>
+    <h1>NOW Foods – Dagleg vítamínráðgjöf</h1>
     <div class="sub">
-      Enter your details and get a simple daily supplement plan using <b>only NOW Foods</b> products (nowfoods.com).
-      <br/>Not medical advice — always check labels/IFU and talk to a clinician if pregnant/nursing, on medication, or managing medical conditions.
+      Sláðu inn upplýsingar og fáðu einfalda daglega áætlun – <b>eingöngu NOW Foods</b> vörur (nowfoods.com).
+      <br/>Ekki læknisráð. Athugaðu alltaf merkingar („Suggested Usage“) og ráðfærðu þig við heilbrigðisstarfsfólk ef þú ert þunguð/á lyfjum/eða með sjúkdóma.
     </div>
   </header>
 
   <main>
     <div class="grid">
       <section class="card">
-        <h2>Your basics</h2>
+        <h2>Grunnupplýsingar</h2>
 
         <div class="row">
           <div>
-            <label for="sex">Sex</label>
+            <label for="sex">Kyn</label>
             <select id="sex">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="male">Karl</option>
+              <option value="female">Kona</option>
             </select>
           </div>
           <div>
-            <label for="age">Age</label>
-            <input id="age" type="number" min="10" max="120" placeholder="e.g., 41" />
+            <label for="age">Aldur</label>
+            <input id="age" type="number" min="10" max="120" placeholder="t.d. 41" />
           </div>
         </div>
 
         <div class="row">
           <div>
-            <label for="height">Height (cm)</label>
-            <input id="height" type="number" min="120" max="230" placeholder="e.g., 190" />
+            <label for="height">Hæð (cm)</label>
+            <input id="height" type="number" min="120" max="230" placeholder="t.d. 190" />
           </div>
           <div>
-            <label for="weight">Weight (kg)</label>
-            <input id="weight" type="number" min="30" max="300" placeholder="e.g., 120" />
+            <label for="weight">Þyngd (kg)</label>
+            <input id="weight" type="number" min="30" max="300" placeholder="t.d. 120" />
           </div>
         </div>
 
         <div class="row">
           <div>
-            <label for="activity">Activity level</label>
+            <label for="activity">Hreyfing</label>
             <select id="activity">
-              <option value="low">Low (mostly sitting)</option>
-              <option value="moderate" selected>Moderate</option>
-              <option value="high">High (hard training / lots of steps)</option>
+              <option value="low">Lítil (mest setið)</option>
+              <option value="moderate" selected>Miðlungs</option>
+              <option value="high">Mikil (mikil þjálfun / mikið gengið)</option>
             </select>
           </div>
           <div>
-            <label for="diet">Diet pattern</label>
+            <label for="diet">Mataræði</label>
             <select id="diet">
-              <option value="mixed" selected>Mixed</option>
-              <option value="vegetarian">Vegetarian</option>
+              <option value="mixed" selected>Blandað</option>
+              <option value="vegetarian">Grænmetisfæði</option>
               <option value="vegan">Vegan</option>
             </select>
           </div>
@@ -177,49 +214,49 @@
           <div class="check">
             <input id="lowSun" type="checkbox" checked />
             <div>
-              <b>Low sun exposure</b>
-              <span>Office job, winter season, high latitude, covered skin, etc. (often true in Iceland).</span>
+              <b>Lítil sól</b>
+              <span>Skrifstofa, vetrartími, hár breiddargráða, lítil UV útsetning o.s.frv.</span>
             </div>
           </div>
 
           <div class="check" id="pregRow" style="display:none;">
             <input id="pregnant" type="checkbox" />
             <div>
-              <b>Pregnant / trying to conceive</b>
-              <span>Switches the “base multi” to a prenatal formula.</span>
+              <b>Þunguð / að reyna að verða þunguð</b>
+              <span>Skiptir „grunn-multí“ yfir í meðgönguformúlu.</span>
             </div>
           </div>
 
           <div class="check">
             <input id="lowFish" type="checkbox" checked />
             <div>
-              <b>Rarely eat fatty fish</b>
-              <span>Suggests an omega-3 option.</span>
+              <b>Borða sjaldan feitan fisk</b>
+              <span>Leggur til omega-3 (nema ef þú velur Vegan).</span>
             </div>
           </div>
 
           <div class="check">
             <input id="constipationSensitive" type="checkbox" />
             <div>
-              <b>Sensitive stomach / reflux</b>
-              <span>Prioritizes “gentler” formats when applicable.</span>
+              <b>Viðkvæmur magi / bakflæði</b>
+              <span>Reynir að velja „mildari“ form þegar við á.</span>
             </div>
           </div>
 
           <div class="check">
             <input id="knownLowIron" type="checkbox" />
             <div>
-              <b>Confirmed low iron (lab/doctor)</b>
-              <span>If checked, the plan may add an iron product. Don’t supplement iron blindly.</span>
+              <b>Staðfestur járnskortur (blóðprufa/læknir)</b>
+              <span>Járn er aðeins lagt til ef þetta er hakað við.</span>
             </div>
           </div>
         </div>
 
         <div class="actions">
-          <button id="btnGenerate">Generate my plan</button>
-          <button id="btnSave" class="secondary">Save inputs</button>
-          <button id="btnLoad" class="secondary">Load saved</button>
-          <button id="btnClear" class="secondary">Clear</button>
+          <button id="btnGenerate">Búa til áætlun</button>
+          <button id="btnSave" class="secondary">Vista innslátt</button>
+          <button id="btnLoad" class="secondary">Hlaða vistuðu</button>
+          <button id="btnClear" class="secondary">Hreinsa</button>
         </div>
 
         <div class="hr"></div>
@@ -228,29 +265,35 @@
 
       <section class="card">
         <div class="resultsTop">
-          <h2 style="margin:0;">Your daily plan</h2>
+          <h2 style="margin:0;">Dagleg áætlun</h2>
           <div id="badgeRow" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
         </div>
 
         <div id="results" class="small">
-          Fill in your details and click <b>Generate my plan</b>.
+          Fylltu inn upplýsingar og smelltu á <b>Búa til áætlun</b>.
         </div>
 
         <div class="hr"></div>
 
-        <h2>Copy/paste summary</h2>
-        <textarea id="summary" placeholder="Your summary will appear here..." readonly></textarea>
-        <div class="actions">
-          <button id="btnCopy">Copy summary</button>
-          <button id="btnOpenLinks" class="secondary">Open product pages</button>
+        <h2>Yfirlit (með lit & myndum)</h2>
+        <div id="summaryPreview" class="small">
+          <div class="muted">Yfirlitið birtist hér þegar þú býrð til áætlun.</div>
+        </div>
+
+        <!-- Falið: hreint texta-yfirlit sem er notað fyrir “Copy” -->
+        <textarea id="summaryText" class="hidden" readonly></textarea>
+
+        <div class="actions" style="margin-top:12px;">
+          <button id="btnCopy">Afrita yfirlit</button>
+          <button id="btnOpenLinks" class="secondary">Opna vörusíður</button>
         </div>
 
         <div class="small" style="margin-top:10px;">
-          Tips:
+          Ábendingar:
           <ul>
-            <li>Start with the <b>base multi</b>, then add 1 supplement at a time for a week to see tolerance.</li>
-            <li>When in doubt, use the “Suggested Usage” on the NOW label for dosing.</li>
-            <li>If you’re on meds (blood thinners, thyroid meds, antibiotics, etc.), check interactions with a clinician/pharmacist.</li>
+            <li>Byrjaðu á <b>grunn-multí</b>, bættu svo við 1 vöru í einu (vika) til að meta þol.</li>
+            <li>Fylgdu alltaf „Suggested Usage“ á NOW merkingum.</li>
+            <li>Ef þú ert á lyfjum (t.d. blóðþynning, skjaldkirtilslyf o.fl.), skoðaðu milliverkanir.</li>
           </ul>
         </div>
       </section>
@@ -259,88 +302,98 @@
 
 <script>
 (function(){
-  // NOW Foods products (ONLY)
-  // Note: dosing strings are conservative + “label-first”.
+  // NOW Foods vörur (eingöngu)
+  // Myndir eru beinar NOW Foods myndir (nowfoods.com)
   const PRODUCTS = {
     adamTabs: {
+      key: "adamTabs",
       name: "ADAM™ Men's Multiple Vitamin Tablets (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/adam-mens-multiple-vitamin-tablets",
-      tags: ["Base multi", "Men"],
-      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
-      why: "A men’s daily multivitamin base.",
-      cites: "ADAM Men’s Multiple is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_thumbnail/public/2023-07/3875_mainimage.png?itok=ankcl2br",
+      tags: ["Grunn-multí", "Karl"],
+      dose_is: "Fylgdu „Suggested Usage“ á merkingu. Tekið með mat.",
+      why_is: "Grunn daglegt fjölvítamín fyrir karla."
     },
     eveSoftgels: {
+      key: "eveSoftgels",
       name: "EVE™ Women's Multiple Vitamin Softgels (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/eve-womens-multiple-vitamin-softgels",
-      tags: ["Base multi", "Women"],
-      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
-      why: "A women’s daily multivitamin base (softgels can be easier on the stomach).",
-      cites: "EVE Women’s Multiple Softgels is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_image/public/2026-01/3802_v12.png?itok=c3SUqw-G",
+      tags: ["Grunn-multí", "Kona"],
+      dose_is: "Fylgdu „Suggested Usage“ á merkingu. Tekið með mat.",
+      why_is: "Grunn daglegt fjölvítamín fyrir konur (softgels geta verið auðveldari fyrir maga)."
     },
     eveTabs: {
+      key: "eveTabs",
       name: "EVE™ Women's Multiple Vitamin Tablets (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/eve-womens-multiple-vitamin-tablets",
-      tags: ["Base multi", "Women"],
-      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
-      why: "A women’s daily multivitamin base.",
-      cites: "EVE Women’s Multiple Tablets is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_image/public/2025-04/3796_v17.png?itok=x1elqJeF",
+      tags: ["Grunn-multí", "Kona"],
+      dose_is: "Fylgdu „Suggested Usage“ á merkingu. Tekið með mat.",
+      why_is: "Grunn daglegt fjölvítamín fyrir konur."
     },
     prenatal: {
+      key: "prenatal",
       name: "Prenatal Gels + DHA Softgels (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/prenatal-gels-dha-softgels",
-      tags: ["Base multi", "Prenatal"],
-      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
-      why: "Designed for pregnancy / child-bearing years and includes DHA.",
-      cites: "Prenatal Gels + DHA is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_thumbnail/public/2024-12/3809_v8_Right.png?itok=HcdEMZJQ",
+      tags: ["Grunn-multí", "Meðganga"],
+      dose_is: "Fylgdu „Suggested Usage“ á merkingu. Tekið með mat.",
+      why_is: "Hannað fyrir meðgöngu/að reyna að verða þunguð og inniheldur DHA."
     },
     d3_2000: {
+      key: "d3_2000",
       name: "Vitamin D-3 2000 IU Softgels (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/vitamin-d3-2000-iu-softgels",
-      tags: ["Vitamin D"],
-      dose: "Often 1 softgel daily with a meal (but follow the label).",
-      why: "Common add-on when sun exposure is low.",
-      cites: "Vitamin D-3 2000 IU is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_image/public/2025-09/0355_v4.png?itok=wfrfeh0H",
+      tags: ["D-vítamín"],
+      dose_is: "Algengt er 1 á dag með máltíð (en fylgdu alltaf merkingu).",
+      why_is: "Algeng viðbót þegar sól er lítil."
     },
     ultraOmega3: {
-      name: "Ultra Omega-3 Fish Oil Softgels (NOW Foods)",
+      key: "ultraOmega3",
+      name: "Ultra Omega-3 Softgels (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/ultra-omega-3-fish-oil-bovine-gelatin-softgels",
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_image/public/2023-04/1661_mainimage.png?itok=PoVZOpUg",
       tags: ["Omega-3"],
-      dose: "Use label ‘Suggested Usage’. Take with food.",
-      why: "Omega-3 add-on, especially if you rarely eat fatty fish.",
-      cites: "Ultra Omega-3 is a NOW Foods product."
+      dose_is: "Fylgdu „Suggested Usage“. Tekið með mat.",
+      why_is: "Omega-3, sérstaklega ef þú borðar sjaldan feitan fisk."
     },
     magGly: {
+      key: "magGly",
       name: "Magnesium Glycinate Tablets (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/magnesium-glycinate-tablets",
-      tags: ["Magnesium"],
-      dose: "Often taken in the evening; follow label for amount.",
-      why: "Magnesium support (glycinate is often chosen for tolerability).",
-      cites: "Magnesium Glycinate is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_thumbnail/public/2025-10/1286_1.png?itok=CFbDxXJz",
+      tags: ["Magnesíum"],
+      dose_is: "Oft tekið á kvöldin; fylgdu merkingu.",
+      why_is: "Magnesíum stuðningur (glycinate er oft valið fyrir þol)."
     },
     probiotic10_25: {
+      key: "probiotic10_25",
       name: "Probiotic-10™ 25 Billion Veg Capsules (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/probiotic-10-25-billion-veg-capsules",
-      tags: ["Probiotic"],
-      dose: "Use label ‘Suggested Usage’. Start low if sensitive.",
-      why: "Optional gut support add-on.",
-      cites: "Probiotic-10 is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_image/public/2025-07/2937_v6.png?itok=MFv5ow0A",
+      tags: ["Probiotics"],
+      dose_is: "Fylgdu merkingu. Byrjaðu varlega ef viðkvæmur magi.",
+      why_is: "Valfrjáls stuðningur fyrir meltingu/flóru."
     },
     b12_1000: {
+      key: "b12_1000",
       name: "Vitamin B-12 1000 mcg Lozenges (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/vitamin-b-12-1000-mcg-lozenges",
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_thumbnail/public/2025-01/0466_v6.png?itok=V1kx0U4J",
       tags: ["B-12"],
-      dose: "Use label ‘Suggested Usage’. Consider a few times/week if diet is low in animal foods (label-first).",
-      why: "Especially relevant for vegan/vegetarian patterns.",
-      cites: "B-12 1000 mcg Lozenges is a NOW Foods product."
+      dose_is: "Fylgdu merkingu. Sérstaklega mikilvægt við vegan/grænmetisfæði.",
+      why_is: "Sérstaklega viðeigandi ef mataræði er lítið í dýraafurðum."
     },
     iron18: {
+      key: "iron18",
       name: "Iron 18 mg Veg Capsules (NOW Foods)",
       url: "https://www.nowfoods.com/products/supplements/iron-18-mg-veg-capsules",
-      tags: ["Iron"],
-      dose: "Only if clinician/labs indicate need. Follow label and medical advice.",
-      why: "Iron is not for everyone — suggested only when ‘confirmed low iron’ is checked.",
-      cites: "Iron 18 mg is a NOW Foods product."
+      img: "https://www.nowfoods.com/sites/default/files/styles/cloudzoom_thumbnail/public/2024-10/1443_v7.png?itok=yAkmfiCH",
+      tags: ["Járn"],
+      dose_is: "Aðeins ef læknir/blóðprufur mæla með. Fylgdu merkingu og ráðgjöf.",
+      why_is: "Járn er ekki fyrir alla — aðeins lagt til ef staðfestur skortur er til staðar."
     }
   };
 
@@ -357,8 +410,8 @@
   const lowFish = $("lowFish");
   const constipationSensitive = $("constipationSensitive");
   const knownLowIron = $("knownLowIron");
-
   const pregRow = $("pregRow");
+
   function syncPregVisibility(){
     pregRow.style.display = (sex.value === "female") ? "flex" : "none";
     if(sex.value !== "female") pregnant.checked = false;
@@ -375,10 +428,10 @@
 
   function bmiBadge(bmi){
     if(bmi == null) return null;
-    if(bmi < 18.5) return {label:`BMI ${bmi.toFixed(1)} (underweight)`, cls:"warn"};
-    if(bmi < 25) return {label:`BMI ${bmi.toFixed(1)} (normal)`, cls:"good"};
-    if(bmi < 30) return {label:`BMI ${bmi.toFixed(1)} (overweight)`, cls:"warn"};
-    return {label:`BMI ${bmi.toFixed(1)} (obesity range)`, cls:"warn"};
+    if(bmi < 18.5) return {label:`BMI ${bmi.toFixed(1)} (undirþyngd)`, cls:"warn"};
+    if(bmi < 25) return {label:`BMI ${bmi.toFixed(1)} (eðlilegt)`, cls:"good"};
+    if(bmi < 30) return {label:`BMI ${bmi.toFixed(1)} (yfirþyngd)`, cls:"warn"};
+    return {label:`BMI ${bmi.toFixed(1)} (offita-svið)`, cls:"warn"};
   }
 
   function renderPills(pills){
@@ -399,93 +452,83 @@
       return PRODUCTS.prenatal;
     }
     if(sex === "female"){
-      // If sensitive stomach, prefer softgels.
       return constipationSensitive ? PRODUCTS.eveSoftgels : PRODUCTS.eveTabs;
     }
-    // male
     return PRODUCTS.adamTabs;
   }
 
   function recommend(inputs){
     const stack = [];
-    const cautions = [];
+    const notes = [];
 
-    // Base multi
+    // Grunn multí
     const base = pickBaseMulti(inputs);
     stack.push({
       product: base,
       priority: 1,
-      timing: "Morning / with food"
+      timing_is: "Morgunn / með mat"
     });
 
-    // Vitamin D
+    // D-vítamín
     if(inputs.lowSun){
       stack.push({
         product: PRODUCTS.d3_2000,
         priority: 2,
-        timing: "With a meal (often breakfast or lunch)"
+        timing_is: "Með máltíð (oft morgunmatur eða hádegismatur)"
       });
     }
 
-    // Omega-3 if low fish
+    // Omega-3 ef lítið af feitum fiski
     if(inputs.lowFish){
-      // If vegan, we avoid recommending fish oil; instead we recommend B-12 + note.
       if(inputs.diet === "vegan"){
-        cautions.push("You selected Vegan: this app avoids fish oil products. Consider looking for a NOW plant-based omega option on nowfoods.com if you want omega support.");
+        notes.push("Þú valdir Vegan: appið leggur ekki til fiskiolíu. Ef þú vilt omega-stuðning, skoðaðu plöntuvalkosti á nowfoods.com.");
       } else {
         stack.push({
           product: PRODUCTS.ultraOmega3,
           priority: 3,
-          timing: "With food (often lunch/dinner)"
+          timing_is: "Með mat (oft hádegis- eða kvöldmatur)"
         });
       }
     }
 
-    // Magnesium: useful for many people; we’ll suggest more strongly if activity high.
+    // Magnesíum (sterkara ef miðlungs/mikil hreyfing)
     if(inputs.activity === "high" || inputs.activity === "moderate"){
       stack.push({
         product: PRODUCTS.magGly,
         priority: 4,
-        timing: "Evening"
+        timing_is: "Kvöld"
       });
     }
 
-    // Probiotic: optional, only suggest if user wants “baseline gut support” (we’ll tie to stomach sensitivity)
+    // Probiotics (valfrjálst, tengt við “viðkvæmur magi” hér)
     if(inputs.constipationSensitive){
       stack.push({
         product: PRODUCTS.probiotic10_25,
         priority: 5,
-        timing: "Any time; follow label (many prefer empty stomach)"
+        timing_is: "Samkvæmt merkingu (margir taka á fastandi maga)"
       });
     }
 
-    // B-12: strongly suggest for vegan, optionally for vegetarian
+    // B-12 (vegan/vegetarian)
     if(inputs.diet === "vegan" || inputs.diet === "vegetarian"){
       stack.push({
         product: PRODUCTS.b12_1000,
         priority: 3,
-        timing: "Morning (or any time); follow label"
+        timing_is: "Morgunn (eða hvenær sem er); samkvæmt merkingu"
       });
     }
 
-    // Iron: only when explicitly checked
-    if(inputs.sex === "female" && inputs.knownLowIron){
+    // Járn (aðeins ef hakað við)
+    if(inputs.knownLowIron){
       stack.push({
         product: PRODUCTS.iron18,
         priority: 2,
-        timing: "As directed; avoid taking with calcium/coffee if advised by clinician"
+        timing_is: "Samkvæmt lækni/merkingu; forðastu með kaffi/kalsíum ef ráðlagt"
       });
-      cautions.push("Iron can be harmful if you don’t need it. Best guided by labs + clinician.");
-    } else if(inputs.knownLowIron){
-      stack.push({
-        product: PRODUCTS.iron18,
-        priority: 2,
-        timing: "As directed; avoid taking with calcium/coffee if advised by clinician"
-      });
-      cautions.push("Iron can be harmful if you don’t need it. Best guided by labs + clinician.");
+      notes.push("Járn getur verið skaðlegt ef þú þarft það ekki. Best að styðjast við blóðprufur og ráðgjöf.");
     }
 
-    // Clean duplicates (same URL)
+    // Dedupe
     const uniq = [];
     const seen = new Set();
     for(const s of stack.sort((a,b)=>a.priority-b.priority)){
@@ -494,10 +537,9 @@
       uniq.push(s);
     }
 
-    // General cautions
-    cautions.push("Always follow the NOW label ‘Suggested Usage’ and consult a clinician if pregnant/nursing, on medication, or managing health conditions.");
+    notes.push("Fylgdu alltaf „Suggested Usage“ á NOW merkingum og ráðfærðu þig við heilbrigðisstarfsfólk ef þú ert þunguð/á lyfjum/eða með sjúkdóma.");
 
-    return { stack: uniq, cautions };
+    return { stack: uniq, notes };
   }
 
   function toInputs(){
@@ -523,25 +565,28 @@
     const pills = [];
     const b = bmiBadge(bmi);
     if(b) pills.push(b);
-    if(inputs.lowSun) pills.push({label:"Low sun: D-3 suggested", cls:"good"});
+    if(inputs.lowSun) pills.push({label:"Lítil sól: D-3 lagt til", cls:"good"});
     if(inputs.diet === "vegan") pills.push({label:"Vegan", cls:"warn"});
-    if(inputs.diet === "vegetarian") pills.push({label:"Vegetarian", cls:"good"});
-    if(inputs.pregnant) pills.push({label:"Prenatal mode", cls:"warn"});
+    if(inputs.diet === "vegetarian") pills.push({label:"Grænmetisfæði", cls:"good"});
+    if(inputs.pregnant) pills.push({label:"Meðgöngu-stilling", cls:"warn"});
     renderPills(pills);
 
     $("stats").innerHTML = `
       <div class="small">
-        ${bmi ? `Calculated BMI: <b>${bmi.toFixed(1)}</b>` : `Add height + weight to calculate BMI.`}
+        ${bmi ? `Reiknað BMI: <b>${bmi.toFixed(1)}</b>` : `Settu inn hæð + þyngd til að reikna BMI.`}
       </div>
     `;
 
-    const { stack, cautions } = recommend(inputs);
+    const { stack, notes } = recommend(inputs);
 
     const res = $("results");
+    res.innerHTML = "";
+
     if(!inputs.age || !inputs.height || !inputs.weight){
-      res.innerHTML = `<span class="pill warn">Tip</span> Enter age, height, and weight for a fuller profile. (Recommendations still work, but BMI/tags may be limited.)`;
-    } else {
-      res.innerHTML = "";
+      const tip = document.createElement("div");
+      tip.className = "small";
+      tip.innerHTML = `<span class="pill warn">Ábending</span> Settu inn aldur, hæð og þyngd fyrir betra yfirlit (BMI og merki).`;
+      res.appendChild(tip);
     }
 
     const wrap = document.createElement("div");
@@ -550,6 +595,21 @@
     stack.forEach(entry => {
       const d = document.createElement("div");
       d.className = "item";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "titleRow";
+
+      const img = document.createElement("img");
+      img.className = "prodImg";
+      img.src = entry.product.img;
+      img.alt = entry.product.name;
+      img.loading = "lazy";
+
+      const h = document.createElement("h3");
+      h.innerHTML = `<span class="prodName">${escapeHtml(entry.product.name)}</span>`;
+
+      titleRow.appendChild(img);
+      titleRow.appendChild(h);
 
       const meta = document.createElement("div");
       meta.className = "meta";
@@ -560,23 +620,20 @@
         meta.appendChild(p);
       });
 
-      const h = document.createElement("h3");
-      h.innerHTML = `${entry.product.name}`;
-
       const timing = document.createElement("div");
       timing.className = "small";
-      timing.innerHTML = `<span class="pill good">Timing</span> ${entry.timing}`;
+      timing.innerHTML = `<span class="pill good">Tímasetning</span> ${escapeHtml(entry.timing_is)}`;
 
       const p1 = document.createElement("p");
-      p1.innerHTML = `<b>Why:</b> ${entry.product.why}`;
+      p1.innerHTML = `<b>Af hverju:</b> ${escapeHtml(entry.product.why_is)}`;
 
       const p2 = document.createElement("p");
-      p2.innerHTML = `<b>How to take:</b> ${entry.product.dose}`;
+      p2.innerHTML = `<b>Hvernig á að taka:</b> ${escapeHtml(entry.product.dose_is)}`;
 
       const p3 = document.createElement("p");
-      p3.innerHTML = `<b>Product page:</b> <a href="${entry.product.url}" target="_blank" rel="noopener">Open on nowfoods.com</a>`;
+      p3.innerHTML = `<b>Vörusíða:</b> <a href="${entry.product.url}" target="_blank" rel="noopener">Opna á nowfoods.com</a>`;
 
-      d.appendChild(h);
+      d.appendChild(titleRow);
       d.appendChild(meta);
       d.appendChild(timing);
       d.appendChild(p1);
@@ -586,40 +643,126 @@
       wrap.appendChild(d);
     });
 
-    const cautionBox = document.createElement("div");
-    cautionBox.className = "item";
-    cautionBox.innerHTML = `
-      <h3>Notes & cautions</h3>
+    const noteBox = document.createElement("div");
+    noteBox.className = "item";
+    noteBox.innerHTML = `
+      <h3>Athugasemdir & varúð</h3>
       <ul class="small" style="margin:6px 0 0; padding-left:18px;">
-        ${cautions.map(c => `<li>${escapeHtml(c)}</li>`).join("")}
+        ${notes.map(n => `<li>${escapeHtml(n)}</li>`).join("")}
       </ul>
     `;
 
     res.appendChild(wrap);
     res.appendChild(document.createElement("div")).className = "hr";
-    res.appendChild(cautionBox);
+    res.appendChild(noteBox);
 
-    // Summary text
+    // --- YFIRLIT: SÝNILEGT (með lit + myndum) ---
+    const preview = $("summaryPreview");
+    preview.innerHTML = "";
+
+    const top = document.createElement("div");
+    top.className = "line";
+    top.innerHTML = `<b>NOW Foods – Dagleg áætlun</b>`;
+    preview.appendChild(top);
+
+    const line1 = document.createElement("div");
+    line1.className = "line muted";
+    line1.textContent = `Kyn: ${inputs.sex === "male" ? "Karl" : "Kona"} · Aldur: ${inputs.age || "?"} · Mataræði: ${dietLabel(inputs.diet)} · Hreyfing: ${activityLabel(inputs.activity)}`;
+    preview.appendChild(line1);
+
+    if(inputs.height && inputs.weight && bmi){
+      const line2 = document.createElement("div");
+      line2.className = "line muted";
+      line2.textContent = `Hæð/Þyngd: ${inputs.height} cm / ${inputs.weight} kg (BMI ${bmi.toFixed(1)})`;
+      preview.appendChild(line2);
+    }
+
+    const hr = document.createElement("div");
+    hr.className = "hr";
+    preview.appendChild(hr);
+
+    const supTitle = document.createElement("div");
+    supTitle.className = "line";
+    supTitle.innerHTML = `<b>Vörur</b>`;
+    preview.appendChild(supTitle);
+
+    const ul = document.createElement("ul");
+    ul.className = "small";
+
+    stack.forEach((s) => {
+      const li = document.createElement("li");
+
+      const row = document.createElement("div");
+      row.className = "summaryItem";
+
+      const img = document.createElement("img");
+      img.src = s.product.img;
+      img.alt = s.product.name;
+      img.loading = "lazy";
+
+      const text = document.createElement("div");
+      text.innerHTML = `
+        <div><span class="prodName">${escapeHtml(s.product.name)}</span></div>
+        <div class="muted">Tímasetning: ${escapeHtml(s.timing_is)}</div>
+      `;
+
+      row.appendChild(img);
+      row.appendChild(text);
+      li.appendChild(row);
+      ul.appendChild(li);
+    });
+    preview.appendChild(ul);
+
+    const hr2 = document.createElement("div");
+    hr2.className = "hr";
+    preview.appendChild(hr2);
+
+    const noteTitle = document.createElement("div");
+    noteTitle.className = "line";
+    noteTitle.innerHTML = `<b>Athugasemdir</b>`;
+    preview.appendChild(noteTitle);
+
+    const ul2 = document.createElement("ul");
+    ul2.className = "small";
+    notes.forEach(n => {
+      const li = document.createElement("li");
+      li.textContent = n;
+      ul2.appendChild(li);
+    });
+    preview.appendChild(ul2);
+
+    // --- TEXTA-YFIRLIT: FYRIR AFTRITUN ---
     const lines = [];
-    lines.push(`NOW Foods Daily Plan`);
-    lines.push(`- Sex: ${inputs.sex}, Age: ${inputs.age || "?"}`);
-    if(inputs.height && inputs.weight && bmi) lines.push(`- Height/Weight: ${inputs.height} cm / ${inputs.weight} kg (BMI ${bmi.toFixed(1)})`);
-    lines.push(`- Diet: ${inputs.diet}, Activity: ${inputs.activity}`);
+    lines.push(`NOW Foods – Dagleg áætlun`);
+    lines.push(`- Kyn: ${inputs.sex === "male" ? "Karl" : "Kona"}, Aldur: ${inputs.age || "?"}`);
+    if(inputs.height && inputs.weight && bmi) lines.push(`- Hæð/Þyngd: ${inputs.height} cm / ${inputs.weight} kg (BMI ${bmi.toFixed(1)})`);
+    lines.push(`- Mataræði: ${dietLabel(inputs.diet)}, Hreyfing: ${activityLabel(inputs.activity)}`);
     lines.push(``);
-    lines.push(`Supplements:`);
+    lines.push(`Vörur:`);
     stack.forEach((s, idx) => {
       lines.push(`${idx+1}. ${s.product.name}`);
-      lines.push(`   • Timing: ${s.timing}`);
-      lines.push(`   • Why: ${s.product.why}`);
-      lines.push(`   • Label-first dosing: ${s.product.dose}`);
+      lines.push(`   • Tímasetning: ${s.timing_is}`);
+      lines.push(`   • Af hverju: ${s.product.why_is}`);
+      lines.push(`   • Hvernig: ${s.product.dose_is}`);
       lines.push(`   • Link: ${s.product.url}`);
       lines.push(``);
     });
-    lines.push(`Notes:`);
-    cautions.forEach(c => lines.push(`- ${c}`));
+    lines.push(`Athugasemdir:`);
+    notes.forEach(n => lines.push(`- ${n}`));
+    $("summaryText").value = lines.join("\n");
 
-    $("summary").value = lines.join("\n");
     window.__lastLinks = stack.map(s => s.product.url);
+  }
+
+  function dietLabel(v){
+    if(v === "vegan") return "Vegan";
+    if(v === "vegetarian") return "Grænmetisfæði";
+    return "Blandað";
+  }
+  function activityLabel(v){
+    if(v === "low") return "Lítil";
+    if(v === "high") return "Mikil";
+    return "Miðlungs";
   }
 
   function escapeHtml(str){
@@ -632,7 +775,7 @@
   }
 
   // Storage
-  const KEY = "nowVitaminRecommenderInputs_v1";
+  const KEY = "nowVitaminRecommenderInputs_v2_is";
   function save(){
     localStorage.setItem(KEY, JSON.stringify(toInputs()));
   }
@@ -667,8 +810,9 @@
     knownLowIron.checked = false;
     sex.value = "male";
     syncPregVisibility();
-    $("results").innerHTML = `Fill in your details and click <b>Generate my plan</b>.`;
-    $("summary").value = "";
+    $("results").innerHTML = `Fylltu inn upplýsingar og smelltu á <b>Búa til áætlun</b>.`;
+    $("summaryPreview").innerHTML = `<div class="muted">Yfirlitið birtist hér þegar þú býrð til áætlun.</div>`;
+    $("summaryText").value = "";
     $("badgeRow").innerHTML = "";
     $("stats").innerHTML = "";
   }
@@ -680,30 +824,31 @@
   $("btnClear").addEventListener("click", clearAll);
 
   $("btnCopy").addEventListener("click", async () => {
-    const txt = $("summary").value || "";
-    if(!txt.trim()) return alert("Generate a plan first.");
+    const txt = $("summaryText").value || "";
+    if(!txt.trim()) return alert("Búðu til áætlun fyrst.");
     try{
       await navigator.clipboard.writeText(txt);
-      alert("Copied!");
+      alert("Yfirlit afritað!");
     }catch(e){
       // Fallback
-      $("summary").focus();
-      $("summary").select();
+      const ta = $("summaryText");
+      ta.classList.remove("hidden");
+      ta.focus();
+      ta.select();
       document.execCommand("copy");
-      alert("Copied (fallback)!");
+      ta.classList.add("hidden");
+      alert("Yfirlit afritað (fallback)!");
     }
   });
 
   $("btnOpenLinks").addEventListener("click", () => {
     const links = window.__lastLinks || [];
-    if(!links.length) return alert("Generate a plan first.");
-    // Open each in a new tab (browser might block multiple popups; users can click individually too)
+    if(!links.length) return alert("Búðu til áætlun fyrst.");
     links.forEach(u => window.open(u, "_blank", "noopener"));
   });
 
   // Auto-load saved inputs if present
   load();
-
 })();
 </script>
 </body>
