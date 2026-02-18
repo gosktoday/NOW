@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOW Foods Daily Vitamin Recommender</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a30;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --accent:#6aa6ff;
+      --border:rgba(255,255,255,0.10);
+      --good:#46d38a;
+      --warn:#ffcf5a;
+      --bad:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 0%, #14244a 0%, var(--bg) 60%);
+      color:var(--text);
+    }
+    header{
+      padding:28px 18px 12px;
+      max-width:1100px; margin:0 auto;
+    }
+    h1{margin:0 0 6px; font-size:22px; letter-spacing:0.2px}
+    .sub{color:var(--muted); font-size:13px; line-height:1.35}
+    main{max-width:1100px; margin:0 auto; padding:12px 18px 40px;}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 420px 1fr; align-items:start; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:15px;
+      letter-spacing:0.2px;
+      color:#d9e6ff;
+    }
+    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px;}
+    input, select, button, textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.18);
+      color:var(--text);
+      padding:10px 12px;
+      font-size:14px;
+      outline:none;
+    }
+    input::placeholder{color:rgba(234,240,255,0.45)}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
+    .row3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
+    .checks{display:grid; gap:8px; margin-top:8px;}
+    .check{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px 12px; border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.14);
+    }
+    .check input{width:auto; margin-top:2px;}
+    .check b{display:block; font-size:13px; margin-bottom:2px;}
+    .check span{display:block; font-size:12px; color:var(--muted); line-height:1.3;}
+    .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;}
+    button{
+      cursor:pointer;
+      background: linear-gradient(180deg, rgba(106,166,255,0.35), rgba(106,166,255,0.18));
+      border:1px solid rgba(106,166,255,0.45);
+    }
+    button.secondary{
+      background: rgba(0,0,0,0.18);
+      border:1px solid var(--border);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.16);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .pill.good{color: #bff6d9; border-color: rgba(70,211,138,0.35); background: rgba(70,211,138,0.10);}
+    .pill.warn{color: #ffe6a8; border-color: rgba(255,207,90,0.35); background: rgba(255,207,90,0.10);}
+    .pill.bad{color: #ffd0d0; border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.10);}
+    .resultsTop{
+      display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .stack{display:grid; gap:10px; margin-top:10px;}
+    .item{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      background: rgba(0,0,0,0.14);
+    }
+    .item h3{margin:0 0 6px; font-size:14px;}
+    .meta{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;}
+    .item p{margin:6px 0 0; color:var(--muted); font-size:12.5px; line-height:1.4;}
+    a{color:#b7d2ff}
+    .small{font-size:12px; color:var(--muted); line-height:1.4;}
+    .hr{height:1px; background:var(--border); margin:12px 0;}
+    textarea{min-height:120px; resize:vertical}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>NOW Foods Daily Vitamin Recommender</h1>
+    <div class="sub">
+      Enter your details and get a simple daily supplement plan using <b>only NOW Foods</b> products (nowfoods.com).
+      <br/>Not medical advice — always check labels/IFU and talk to a clinician if pregnant/nursing, on medication, or managing medical conditions.
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>Your basics</h2>
+
+        <div class="row">
+          <div>
+            <label for="sex">Sex</label>
+            <select id="sex">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div>
+            <label for="age">Age</label>
+            <input id="age" type="number" min="10" max="120" placeholder="e.g., 41" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="height">Height (cm)</label>
+            <input id="height" type="number" min="120" max="230" placeholder="e.g., 190" />
+          </div>
+          <div>
+            <label for="weight">Weight (kg)</label>
+            <input id="weight" type="number" min="30" max="300" placeholder="e.g., 120" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="activity">Activity level</label>
+            <select id="activity">
+              <option value="low">Low (mostly sitting)</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="high">High (hard training / lots of steps)</option>
+            </select>
+          </div>
+          <div>
+            <label for="diet">Diet pattern</label>
+            <select id="diet">
+              <option value="mixed" selected>Mixed</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="check">
+            <input id="lowSun" type="checkbox" checked />
+            <div>
+              <b>Low sun exposure</b>
+              <span>Office job, winter season, high latitude, covered skin, etc. (often true in Iceland).</span>
+            </div>
+          </div>
+
+          <div class="check" id="pregRow" style="display:none;">
+            <input id="pregnant" type="checkbox" />
+            <div>
+              <b>Pregnant / trying to conceive</b>
+              <span>Switches the “base multi” to a prenatal formula.</span>
+            </div>
+          </div>
+
+          <div class="check">
+            <input id="lowFish" type="checkbox" checked />
+            <div>
+              <b>Rarely eat fatty fish</b>
+              <span>Suggests an omega-3 option.</span>
+            </div>
+          </div>
+
+          <div class="check">
+            <input id="constipationSensitive" type="checkbox" />
+            <div>
+              <b>Sensitive stomach / reflux</b>
+              <span>Prioritizes “gentler” formats when applicable.</span>
+            </div>
+          </div>
+
+          <div class="check">
+            <input id="knownLowIron" type="checkbox" />
+            <div>
+              <b>Confirmed low iron (lab/doctor)</b>
+              <span>If checked, the plan may add an iron product. Don’t supplement iron blindly.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnGenerate">Generate my plan</button>
+          <button id="btnSave" class="secondary">Save inputs</button>
+          <button id="btnLoad" class="secondary">Load saved</button>
+          <button id="btnClear" class="secondary">Clear</button>
+        </div>
+
+        <div class="hr"></div>
+        <div id="stats" class="small"></div>
+      </section>
+
+      <section class="card">
+        <div class="resultsTop">
+          <h2 style="margin:0;">Your daily plan</h2>
+          <div id="badgeRow" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+        </div>
+
+        <div id="results" class="small">
+          Fill in your details and click <b>Generate my plan</b>.
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>Copy/paste summary</h2>
+        <textarea id="summary" placeholder="Your summary will appear here..." readonly></textarea>
+        <div class="actions">
+          <button id="btnCopy">Copy summary</button>
+          <button id="btnOpenLinks" class="secondary">Open product pages</button>
+        </div>
+
+        <div class="small" style="margin-top:10px;">
+          Tips:
+          <ul>
+            <li>Start with the <b>base multi</b>, then add 1 supplement at a time for a week to see tolerance.</li>
+            <li>When in doubt, use the “Suggested Usage” on the NOW label for dosing.</li>
+            <li>If you’re on meds (blood thinners, thyroid meds, antibiotics, etc.), check interactions with a clinician/pharmacist.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+<script>
+(function(){
+  // NOW Foods products (ONLY)
+  // Note: dosing strings are conservative + “label-first”.
+  const PRODUCTS = {
+    adamTabs: {
+      name: "ADAM™ Men's Multiple Vitamin Tablets (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/adam-mens-multiple-vitamin-tablets",
+      tags: ["Base multi", "Men"],
+      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
+      why: "A men’s daily multivitamin base.",
+      cites: "ADAM Men’s Multiple is a NOW Foods product."
+    },
+    eveSoftgels: {
+      name: "EVE™ Women's Multiple Vitamin Softgels (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/eve-womens-multiple-vitamin-softgels",
+      tags: ["Base multi", "Women"],
+      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
+      why: "A women’s daily multivitamin base (softgels can be easier on the stomach).",
+      cites: "EVE Women’s Multiple Softgels is a NOW Foods product."
+    },
+    eveTabs: {
+      name: "EVE™ Women's Multiple Vitamin Tablets (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/eve-womens-multiple-vitamin-tablets",
+      tags: ["Base multi", "Women"],
+      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
+      why: "A women’s daily multivitamin base.",
+      cites: "EVE Women’s Multiple Tablets is a NOW Foods product."
+    },
+    prenatal: {
+      name: "Prenatal Gels + DHA Softgels (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/prenatal-gels-dha-softgels",
+      tags: ["Base multi", "Prenatal"],
+      dose: "Use label ‘Suggested Usage’. Typically taken with food.",
+      why: "Designed for pregnancy / child-bearing years and includes DHA.",
+      cites: "Prenatal Gels + DHA is a NOW Foods product."
+    },
+    d3_2000: {
+      name: "Vitamin D-3 2000 IU Softgels (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/vitamin-d3-2000-iu-softgels",
+      tags: ["Vitamin D"],
+      dose: "Often 1 softgel daily with a meal (but follow the label).",
+      why: "Common add-on when sun exposure is low.",
+      cites: "Vitamin D-3 2000 IU is a NOW Foods product."
+    },
+    ultraOmega3: {
+      name: "Ultra Omega-3 Fish Oil Softgels (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/ultra-omega-3-fish-oil-bovine-gelatin-softgels",
+      tags: ["Omega-3"],
+      dose: "Use label ‘Suggested Usage’. Take with food.",
+      why: "Omega-3 add-on, especially if you rarely eat fatty fish.",
+      cites: "Ultra Omega-3 is a NOW Foods product."
+    },
+    magGly: {
+      name: "Magnesium Glycinate Tablets (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/magnesium-glycinate-tablets",
+      tags: ["Magnesium"],
+      dose: "Often taken in the evening; follow label for amount.",
+      why: "Magnesium support (glycinate is often chosen for tolerability).",
+      cites: "Magnesium Glycinate is a NOW Foods product."
+    },
+    probiotic10_25: {
+      name: "Probiotic-10™ 25 Billion Veg Capsules (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/probiotic-10-25-billion-veg-capsules",
+      tags: ["Probiotic"],
+      dose: "Use label ‘Suggested Usage’. Start low if sensitive.",
+      why: "Optional gut support add-on.",
+      cites: "Probiotic-10 is a NOW Foods product."
+    },
+    b12_1000: {
+      name: "Vitamin B-12 1000 mcg Lozenges (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/vitamin-b-12-1000-mcg-lozenges",
+      tags: ["B-12"],
+      dose: "Use label ‘Suggested Usage’. Consider a few times/week if diet is low in animal foods (label-first).",
+      why: "Especially relevant for vegan/vegetarian patterns.",
+      cites: "B-12 1000 mcg Lozenges is a NOW Foods product."
+    },
+    iron18: {
+      name: "Iron 18 mg Veg Capsules (NOW Foods)",
+      url: "https://www.nowfoods.com/products/supplements/iron-18-mg-veg-capsules",
+      tags: ["Iron"],
+      dose: "Only if clinician/labs indicate need. Follow label and medical advice.",
+      why: "Iron is not for everyone — suggested only when ‘confirmed low iron’ is checked.",
+      cites: "Iron 18 mg is a NOW Foods product."
+    }
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  const sex = $("sex");
+  const age = $("age");
+  const height = $("height");
+  const weight = $("weight");
+  const activity = $("activity");
+  const diet = $("diet");
+  const lowSun = $("lowSun");
+  const pregnant = $("pregnant");
+  const lowFish = $("lowFish");
+  const constipationSensitive = $("constipationSensitive");
+  const knownLowIron = $("knownLowIron");
+
+  const pregRow = $("pregRow");
+  function syncPregVisibility(){
+    pregRow.style.display = (sex.value === "female") ? "flex" : "none";
+    if(sex.value !== "female") pregnant.checked = false;
+  }
+  sex.addEventListener("change", syncPregVisibility);
+  syncPregVisibility();
+
+  function bmiFrom(cm, kg){
+    if(!cm || !kg) return null;
+    const m = cm / 100;
+    if(m <= 0) return null;
+    return kg / (m*m);
+  }
+
+  function bmiBadge(bmi){
+    if(bmi == null) return null;
+    if(bmi < 18.5) return {label:`BMI ${bmi.toFixed(1)} (underweight)`, cls:"warn"};
+    if(bmi < 25) return {label:`BMI ${bmi.toFixed(1)} (normal)`, cls:"good"};
+    if(bmi < 30) return {label:`BMI ${bmi.toFixed(1)} (overweight)`, cls:"warn"};
+    return {label:`BMI ${bmi.toFixed(1)} (obesity range)`, cls:"warn"};
+  }
+
+  function renderPills(pills){
+    const row = $("badgeRow");
+    row.innerHTML = "";
+    pills.filter(Boolean).forEach(p => {
+      const el = document.createElement("span");
+      el.className = `pill ${p.cls || ""}`.trim();
+      el.textContent = p.label;
+      row.appendChild(el);
+    });
+  }
+
+  function pickBaseMulti(inputs){
+    const { sex, pregnant, constipationSensitive } = inputs;
+
+    if(sex === "female" && pregnant){
+      return PRODUCTS.prenatal;
+    }
+    if(sex === "female"){
+      // If sensitive stomach, prefer softgels.
+      return constipationSensitive ? PRODUCTS.eveSoftgels : PRODUCTS.eveTabs;
+    }
+    // male
+    return PRODUCTS.adamTabs;
+  }
+
+  function recommend(inputs){
+    const stack = [];
+    const cautions = [];
+
+    // Base multi
+    const base = pickBaseMulti(inputs);
+    stack.push({
+      product: base,
+      priority: 1,
+      timing: "Morning / with food"
+    });
+
+    // Vitamin D
+    if(inputs.lowSun){
+      stack.push({
+        product: PRODUCTS.d3_2000,
+        priority: 2,
+        timing: "With a meal (often breakfast or lunch)"
+      });
+    }
+
+    // Omega-3 if low fish
+    if(inputs.lowFish){
+      // If vegan, we avoid recommending fish oil; instead we recommend B-12 + note.
+      if(inputs.diet === "vegan"){
+        cautions.push("You selected Vegan: this app avoids fish oil products. Consider looking for a NOW plant-based omega option on nowfoods.com if you want omega support.");
+      } else {
+        stack.push({
+          product: PRODUCTS.ultraOmega3,
+          priority: 3,
+          timing: "With food (often lunch/dinner)"
+        });
+      }
+    }
+
+    // Magnesium: useful for many people; we’ll suggest more strongly if activity high.
+    if(inputs.activity === "high" || inputs.activity === "moderate"){
+      stack.push({
+        product: PRODUCTS.magGly,
+        priority: 4,
+        timing: "Evening"
+      });
+    }
+
+    // Probiotic: optional, only suggest if user wants “baseline gut support” (we’ll tie to stomach sensitivity)
+    if(inputs.constipationSensitive){
+      stack.push({
+        product: PRODUCTS.probiotic10_25,
+        priority: 5,
+        timing: "Any time; follow label (many prefer empty stomach)"
+      });
+    }
+
+    // B-12: strongly suggest for vegan, optionally for vegetarian
+    if(inputs.diet === "vegan" || inputs.diet === "vegetarian"){
+      stack.push({
+        product: PRODUCTS.b12_1000,
+        priority: 3,
+        timing: "Morning (or any time); follow label"
+      });
+    }
+
+    // Iron: only when explicitly checked
+    if(inputs.sex === "female" && inputs.knownLowIron){
+      stack.push({
+        product: PRODUCTS.iron18,
+        priority: 2,
+        timing: "As directed; avoid taking with calcium/coffee if advised by clinician"
+      });
+      cautions.push("Iron can be harmful if you don’t need it. Best guided by labs + clinician.");
+    } else if(inputs.knownLowIron){
+      stack.push({
+        product: PRODUCTS.iron18,
+        priority: 2,
+        timing: "As directed; avoid taking with calcium/coffee if advised by clinician"
+      });
+      cautions.push("Iron can be harmful if you don’t need it. Best guided by labs + clinician.");
+    }
+
+    // Clean duplicates (same URL)
+    const uniq = [];
+    const seen = new Set();
+    for(const s of stack.sort((a,b)=>a.priority-b.priority)){
+      if(seen.has(s.product.url)) continue;
+      seen.add(s.product.url);
+      uniq.push(s);
+    }
+
+    // General cautions
+    cautions.push("Always follow the NOW label ‘Suggested Usage’ and consult a clinician if pregnant/nursing, on medication, or managing health conditions.");
+
+    return { stack: uniq, cautions };
+  }
+
+  function toInputs(){
+    return {
+      sex: sex.value,
+      age: Number(age.value || 0),
+      height: Number(height.value || 0),
+      weight: Number(weight.value || 0),
+      activity: activity.value,
+      diet: diet.value,
+      lowSun: !!lowSun.checked,
+      pregnant: !!pregnant.checked,
+      lowFish: !!lowFish.checked,
+      constipationSensitive: !!constipationSensitive.checked,
+      knownLowIron: !!knownLowIron.checked
+    };
+  }
+
+  function render(){
+    const inputs = toInputs();
+
+    const bmi = bmiFrom(inputs.height, inputs.weight);
+    const pills = [];
+    const b = bmiBadge(bmi);
+    if(b) pills.push(b);
+    if(inputs.lowSun) pills.push({label:"Low sun: D-3 suggested", cls:"good"});
+    if(inputs.diet === "vegan") pills.push({label:"Vegan", cls:"warn"});
+    if(inputs.diet === "vegetarian") pills.push({label:"Vegetarian", cls:"good"});
+    if(inputs.pregnant) pills.push({label:"Prenatal mode", cls:"warn"});
+    renderPills(pills);
+
+    $("stats").innerHTML = `
+      <div class="small">
+        ${bmi ? `Calculated BMI: <b>${bmi.toFixed(1)}</b>` : `Add height + weight to calculate BMI.`}
+      </div>
+    `;
+
+    const { stack, cautions } = recommend(inputs);
+
+    const res = $("results");
+    if(!inputs.age || !inputs.height || !inputs.weight){
+      res.innerHTML = `<span class="pill warn">Tip</span> Enter age, height, and weight for a fuller profile. (Recommendations still work, but BMI/tags may be limited.)`;
+    } else {
+      res.innerHTML = "";
+    }
+
+    const wrap = document.createElement("div");
+    wrap.className = "stack";
+
+    stack.forEach(entry => {
+      const d = document.createElement("div");
+      d.className = "item";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      entry.product.tags.forEach(t => {
+        const p = document.createElement("span");
+        p.className = "pill";
+        p.textContent = t;
+        meta.appendChild(p);
+      });
+
+      const h = document.createElement("h3");
+      h.innerHTML = `${entry.product.name}`;
+
+      const timing = document.createElement("div");
+      timing.className = "small";
+      timing.innerHTML = `<span class="pill good">Timing</span> ${entry.timing}`;
+
+      const p1 = document.createElement("p");
+      p1.innerHTML = `<b>Why:</b> ${entry.product.why}`;
+
+      const p2 = document.createElement("p");
+      p2.innerHTML = `<b>How to take:</b> ${entry.product.dose}`;
+
+      const p3 = document.createElement("p");
+      p3.innerHTML = `<b>Product page:</b> <a href="${entry.product.url}" target="_blank" rel="noopener">Open on nowfoods.com</a>`;
+
+      d.appendChild(h);
+      d.appendChild(meta);
+      d.appendChild(timing);
+      d.appendChild(p1);
+      d.appendChild(p2);
+      d.appendChild(p3);
+
+      wrap.appendChild(d);
+    });
+
+    const cautionBox = document.createElement("div");
+    cautionBox.className = "item";
+    cautionBox.innerHTML = `
+      <h3>Notes & cautions</h3>
+      <ul class="small" style="margin:6px 0 0; padding-left:18px;">
+        ${cautions.map(c => `<li>${escapeHtml(c)}</li>`).join("")}
+      </ul>
+    `;
+
+    res.appendChild(wrap);
+    res.appendChild(document.createElement("div")).className = "hr";
+    res.appendChild(cautionBox);
+
+    // Summary text
+    const lines = [];
+    lines.push(`NOW Foods Daily Plan`);
+    lines.push(`- Sex: ${inputs.sex}, Age: ${inputs.age || "?"}`);
+    if(inputs.height && inputs.weight && bmi) lines.push(`- Height/Weight: ${inputs.height} cm / ${inputs.weight} kg (BMI ${bmi.toFixed(1)})`);
+    lines.push(`- Diet: ${inputs.diet}, Activity: ${inputs.activity}`);
+    lines.push(``);
+    lines.push(`Supplements:`);
+    stack.forEach((s, idx) => {
+      lines.push(`${idx+1}. ${s.product.name}`);
+      lines.push(`   • Timing: ${s.timing}`);
+      lines.push(`   • Why: ${s.product.why}`);
+      lines.push(`   • Label-first dosing: ${s.product.dose}`);
+      lines.push(`   • Link: ${s.product.url}`);
+      lines.push(``);
+    });
+    lines.push(`Notes:`);
+    cautions.forEach(c => lines.push(`- ${c}`));
+
+    $("summary").value = lines.join("\n");
+    window.__lastLinks = stack.map(s => s.product.url);
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // Storage
+  const KEY = "nowVitaminRecommenderInputs_v1";
+  function save(){
+    localStorage.setItem(KEY, JSON.stringify(toInputs()));
+  }
+  function load(){
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    const v = JSON.parse(raw);
+    sex.value = v.sex || "male";
+    syncPregVisibility();
+    age.value = v.age || "";
+    height.value = v.height || "";
+    weight.value = v.weight || "";
+    activity.value = v.activity || "moderate";
+    diet.value = v.diet || "mixed";
+    lowSun.checked = !!v.lowSun;
+    pregnant.checked = !!v.pregnant;
+    lowFish.checked = !!v.lowFish;
+    constipationSensitive.checked = !!v.constipationSensitive;
+    knownLowIron.checked = !!v.knownLowIron;
+  }
+  function clearAll(){
+    localStorage.removeItem(KEY);
+    age.value = "";
+    height.value = "";
+    weight.value = "";
+    activity.value = "moderate";
+    diet.value = "mixed";
+    lowSun.checked = true;
+    pregnant.checked = false;
+    lowFish.checked = true;
+    constipationSensitive.checked = false;
+    knownLowIron.checked = false;
+    sex.value = "male";
+    syncPregVisibility();
+    $("results").innerHTML = `Fill in your details and click <b>Generate my plan</b>.`;
+    $("summary").value = "";
+    $("badgeRow").innerHTML = "";
+    $("stats").innerHTML = "";
+  }
+
+  // Buttons
+  $("btnGenerate").addEventListener("click", render);
+  $("btnSave").addEventListener("click", () => { save(); render(); });
+  $("btnLoad").addEventListener("click", () => { load(); render(); });
+  $("btnClear").addEventListener("click", clearAll);
+
+  $("btnCopy").addEventListener("click", async () => {
+    const txt = $("summary").value || "";
+    if(!txt.trim()) return alert("Generate a plan first.");
+    try{
+      await navigator.clipboard.writeText(txt);
+      alert("Copied!");
+    }catch(e){
+      // Fallback
+      $("summary").focus();
+      $("summary").select();
+      document.execCommand("copy");
+      alert("Copied (fallback)!");
+    }
+  });
+
+  $("btnOpenLinks").addEventListener("click", () => {
+    const links = window.__lastLinks || [];
+    if(!links.length) return alert("Generate a plan first.");
+    // Open each in a new tab (browser might block multiple popups; users can click individually too)
+    links.forEach(u => window.open(u, "_blank", "noopener"));
+  });
+
+  // Auto-load saved inputs if present
+  load();
+
+})();
+</script>
+</body>
+</html>
